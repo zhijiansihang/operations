@@ -1,0 +1,26 @@
+logrotater 日志分割
+
+crontab -l 
+logrotate的使用
+https://www.cnblogs.com/tayxxs/p/5701546.html
+http://blog.csdn.net/zgrbsbf/article/details/73826848
+cd /etc/logrotate.d
+touch test
+chmod 644  /etc/logrotate.d/test
+vi test
+/opt/server/logs/test.log {  
+	dateext 
+	daily
+	copytruncate   
+	rotate 7   
+	compress   
+	missingok 
+}
+
+crontab -e
+0 0 * * * /usr/sbin/logrotate /etc/logrotate.conf
+
+
+/etc/cron.daily/logrotate
+/var/log/cron 自动跑批日志
+cat /etc/anacrontab  自动跑批配置

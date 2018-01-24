@@ -1,0 +1,108 @@
+服务器端：
+查看本地是否安装nfs   执行 rpm -qa|grep nfs
+ 若没有则安装：
+1. 安装nfs-utils和rpcbind
+复制代码
+代码如下:
+
+yum install nfs-utils rpcbind
+
+ 
+2.设置开机启动服务
+复制代码
+代码如下:
+
+chkconfig nfs on |systemctl enable nfs.service
+chkconfig rpcbind on |systemctl enable rpcbind.service
+
+ 
+3.启动相关服务
+复制代码
+代码如下:
+
+service rpcbind start  |systemctl start  rpcbind.service
+service nfs start
+备注：重启命令service nfs restart |  systemctl restart nfs.service
+ 
+4.创建共享目录
+复制代码
+代码如下:
+
+mkdir -p /mjs
+
+ 
+5.编辑/etc/exports文件添加如下内容
+复制代码
+代码如下:
+vi /etc/exports
+
+/mjs (客户端ip)(rw,async,no_root_squash,no_subtree_check)
+Demo:
+/mjs 10.139.40.100(rw,async,no_root_squash,no_subtree_check)
+/mjs 10.139.39.164(rw,async,no_root_squash,no_subtree_check) 
+ 
+6.刷新配置立即生效
+复制代码
+代码如下:
+exportfs -a
+
+ 
+客户端配置
+ 
+1. 安装nfs-utils和rpcbind
+复制代码
+代码如下:
+
+yum install nfs-utils rpcbind
+
+ 
+2.设置开机启动服务
+复制代码
+代码如下:
+
+chkconfig nfs on  systemctl enable nfs.service
+chkconfig rpcbind on  systemctl enable rpcbind.service
+
+ 
+3.启动服务
+复制代码
+代码如下:
+
+service rpcbind start   systemctl start  rpcbind.service
+service nfs start    systemctl start nfs.service
+
+ 
+4.创建挂载点
+复制代码
+代码如下:
+
+mkdir -p /mjs(服务端共享的目录) 
+
+
+ 
+5.挂载目录
+复制代码
+代码如下:
+
+mount -t nfs (服务端ip):/mjs(服务端目录) /mjs(客户端目录)
+
+Demo:
+mount -t nfs 10.44.10.50:/mjs /mjs 
+ 
+6.查看挂载的目录
+复制代码
+代码如下:
+
+df -h
+
+3.1	创建共享子目录
+复制代码
+代码如下:
+mkdir -p /mjs/job/data
+mkdir -p /mjs/usr/local/zkbc/agreeMent
+mkdir -p /mjs/usr/local/zkbc/contract
+mkdir -p /mjs/usr/local/zkbc/p2p-app/fs
+mkdir -p /mjs/usr/local/zkbc/p2p-pic/credit
+
+
+

@@ -1,0 +1,43 @@
+tar -xvf file.tar //解压 tar包
+tar -xzvf file.tar.gz //解压tar.gz
+
+pip install -U 升级模块
+服务器端配置
+easy_install pip
+pip install ansible
+ssh-keygen -t rsa
+mkdir -p /etc/ansible
+touch ansible.cfg
+内容如下：
+	[defaults]
+	inventory=/etc/ansible/hosts
+	sudo_user=root
+	remote_port=22
+	host_key_checking=False
+	remote_user=root
+	log_path=/var/log/ansible.log
+	module_name=command
+	private_key_file=/root/.ssh/id_rsa
+	deprecation_warnings=False
+touch hosts
+内容如下：
+	[pc]
+	192.168.184.140
+
+执行命名测试：ansible pc -m ping
+
+客户端配置：为了让服务免密登录，id_rsa.pub:为服务的内容
+cat id_rsa.pub >>~/.ssh/authorized_keys
+chmod 600 authorized_keys
+
+ansible webserver -m command -a 'uptime'
+-m 使用的模块
+-a 为参数
+
+其他模块
+ping
+setup
+file
+copy
+command
+shell

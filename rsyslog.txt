@@ -1,0 +1,19 @@
+rsyslogd centos7 64位安装使用:
+
+SELINUX 默认就要关闭
+rsyslog无法在/var/log目录外记录日志 
+注意:rsyslog无法在/var/log目录外记录日志  
+/etc/selinux/config  SELINUX=disabled 重启 
+
+rsyslogd -v
+yum update rsyslog
+systemctl disable firewalld
+systemctl stop firewalld
+iptables -A INPUT -m state --state NEW -m udp -p udp -i eth0 --dport 514 -j ACCEPT
+iptables -A INPUT -m state --state NEW -m tcp -p tcp -i eth0 --dport 514 -j ACCEPT
+
+ systemctl restart rsyslog.service
+
+查看当前文件
+ 客户端配置文件
+ 服务端配置文件
